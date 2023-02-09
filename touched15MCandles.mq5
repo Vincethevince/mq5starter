@@ -19,20 +19,24 @@ void OnTick()
          int adjustedNumberToCheck = x;
          int finishedBars = 1;
          candleCount = 0;
+         
          if(time - x*900 < lastMonday)
            {
             adjustedNumberToCheck = (time-lastMonday)/900;
             //Print("There's more than x 15M candles since last Monday 0am.");
            }
-         Print("test0: ",time);
+         Print("Timestamp: ",time);
+         
          for(int i=0;i < adjustedNumberToCheck;i++)
          {
+            //get number of bars between start and end of the 15M candle to check -- if gap in chart (numberOfBars == 0) jump to next 15M candle
             numberOfBars = Bars(_Symbol,PERIOD_M1,time-(i+1)*900,time-60-i*900);
             if(numberOfBars == 0)
               {
                   continue;
               }
-              
+            
+            //get high and low between start and end of the 15M candle to check
             double high = iHigh(_Symbol,PERIOD_M1,iHighest(_Symbol,PERIOD_M1,MODE_HIGH,numberOfBars,finishedBars));
             double low = iLow(_Symbol,PERIOD_M1,iLowest(_Symbol,PERIOD_M1,MODE_LOW,numberOfBars,finishedBars));
             finishedBars += numberOfBars;
